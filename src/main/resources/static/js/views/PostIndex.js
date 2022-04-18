@@ -1,5 +1,5 @@
 import createView from "../createView.js";
-import addLoginEvent from "../auth";
+// import addLoginEvent from "../auth";
 
 const POST_URI = "http://localhost:8081/api/posts";
 
@@ -14,8 +14,8 @@ export default function PostIndex(props) {
                 ${props.posts.map(post => {
                 return `<h3 id="title-${post.id}">${post.title}</h3>
                  <p id="content-${post.id}">${post.content}</p>
-                 <a href="#" class="edit-link" data-id="${post.id}">Edit</a>
-                 <a href="#" class="delete-link" data-id="${post.id}">Delete</a>`
+                  <button type="button" class="btn btn-success mb-3 edit-button" data-id="${post.id}">Edit</button>
+                 <button type="button" class="btn btn-danger mb-3 delete-button" data-id="${post.id}">Delete</button>`
                 
     }).join('')} 
             </div>
@@ -31,6 +31,7 @@ export default function PostIndex(props) {
                     <input type="text" class="form-control" id="add-posts-content" placeholder="Enter Content">
                 </div>
                 <button id="add-posts-button" type="button" class="btn btn-primary mb-3">Save Post</button>
+                <button id="update-posts-button" type="button" class="btn btn-success mb-3">Update Post</button>
                </form>
            </div>
         </main>
@@ -41,53 +42,72 @@ export default function PostIndex(props) {
 export function PostsEvent() {
     createAddPostListener();
     //TODO: add edit post listener function
-    EditListener();
+    editListener();
     //TODO: add delete post listener function
     deleteListener();
 }
 
 function createAddPostListener() {
     console.log("adding add post listener")
-    $("#add-post-button").click(function (){
-        const title = $("#add-post-title").val();
-        const content = $("#add-post-content").val();
+    $("#add-posts-button").click(function (){
         const newPost = {
-            title,
-            content
+            title: $("#add-post-title").val(),
+            content: $("#add-post-content").val()
         }
-        console.log("Ready to add: ");
-        console.log(newPost);
 
-        const request = {
-            method: "POST",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(newPost)
-        }
-        fetch(POST_URI, request)
-            .then( res => {
-                console.log(res.status)
-            }).catch(error => {
-            console.log(error)
-        }).finally(() => {
-            createView("/posts")
-        });
+        const postId = $("#add-post-id").val();
+       const request = {};
+       let uriExtra = "";
+       if (postId > 0){
+           newPost.id = postId
+           request.method = "PUT"
+           uriExtra = `/${postId}`;
+           console.log("Ready to update post:");
+       }
+       request.headers = {
+           'Content-Type': 'application/json'
+       };
+       request.body = JSON.stringify(newPost);
+       fetch(`${POST_URI}${uriExtra}`, request)
+           .then(res => {
+               console.log(`${request.method} SUCCESS: ${res.status}`);
+           }).catch(error => {
+           console.log(`${request.method} ERROR: ${error}`);
+       }).finally(() => {
+           createView("/posts")
+       })
     });
 }
 
-function EditListener(){
-    $(".edit-link").click(function (){
+function editListener(){
+    $(".edit-button").click(function (){
         const postId = $(this).data("id");
-        const postTitle = $("#title-" + postId).val();
-        const postContent = $("#content-" + postId).val();
-        console.log(postId);
+        const postTitle = $(`title-${postId}`).val();
+        const postContent = $(`content-${postId}`).val();
+        $("#add-post-id").val(postId);
         $("#add-post-title").val(postTitle);
         $("#add-post-content").val(postContent);
     });
 }
 
 function deleteListener(){
-    $(".delete-link").click(function (){
-        const postId = $(this).data("id")
+    $(".delete-button").click(function (){
+        const postId = $(this).data("id");
+        console.log("deleting Post: " + postId);
 
-    })
+        const request = {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+        fetch(`${POST_URI}/${postId}`)
+            .then(res => {
+                console.log("DELETE SUCCESS: " + res.status);
+            }).catch(error => {
+            console.log("DELETE ERROR: " + error)
+        }).finally(() => {
+            createView("/posts")
+        });
+    });
 }
