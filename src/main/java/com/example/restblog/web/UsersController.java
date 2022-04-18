@@ -14,15 +14,15 @@ public class UsersController {
     @GetMapping
     private List<User> getAll(){
         ArrayList<User> user = new ArrayList<>();
-        user.add(new User(1L, "twinArmageddons", "solluxrules@gmail.com", "toohackerliife", LocalDate.now(), User.Role.ADMIN));
-        user.add(new User(2L, "carcinogenesis", "awesomeKarkat@gmail.com", "COOLESTGUYINTHEROOM", LocalDate.now(), User.Role.ADMIN));
-        user.add(new User(3L, "turntechGodhead", "coolestdave@gmail.com", "turntechgodhead1", LocalDate.now(), User.Role.ADMIN));
+        user.add(new User(1L, "User 1", "email 1m", "password 1", null, User.Role.ADMIN));
+        user.add(new User(2L, "User 2", "email 2", "password2", null, User.Role.ADMIN));
+        user.add(new User(3L, "User 3", "email 3", "password 3", null, User.Role.ADMIN));
         return user;
     }
 
     @GetMapping("{userId}")
     public User getById(@PathVariable Long userId){
-        User user = new User(userId, "timaeusTestified", "RadHuman69@gmail.com", "yobroimhome", LocalDate.now(), User.Role.USER);
+        User user = new User(userId, "User 1", "email 1", "password 1", null, User.Role.ADMIN);
         return user;
     }
 
