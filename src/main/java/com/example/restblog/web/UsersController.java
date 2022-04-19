@@ -3,7 +3,6 @@ package com.example.restblog.web;
 import com.example.restblog.data.User;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class UsersController {
 
     @GetMapping("{userId}")
     public User getById(@PathVariable Long userId){
-        User user = new User(userId, "User 1", "email 1", "password 1", null, User.Role.ADMIN);
+        User user = new User(userId, "Bob Smith", "bobsemail", "password 1", null, User.Role.ADMIN);
         return user;
     }
 
@@ -33,11 +32,11 @@ public class UsersController {
 
     @PutMapping("{userId}")
     private void update(@PathVariable Long userId, @RequestBody User updatedUser){
-        System.out.println("Updating User : " + userId + " with " + updatedUser);
+        System.out.println("Updating user number : " + userId + " with " + updatedUser);
     }
 
     @DeleteMapping("{userId}")
     private void deleteById(@PathVariable Long userId){
-        System.out.println("User has been deleted: " + userId);
+        System.out.println("deleting user with ID: " + userId);
     }
 }

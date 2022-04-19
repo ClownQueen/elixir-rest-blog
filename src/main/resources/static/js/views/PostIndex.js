@@ -30,8 +30,8 @@ export default function PostIndex(props) {
                     <label for="add-posts-content" class="form-label">Content</label>
                     <input type="text" class="form-control" id="add-posts-content" placeholder="Enter Content">
                 </div>
-                <button id="add-posts-button" type="button" class="btn btn-primary mb-3">Save Post</button>
-                <button id="update-posts-button" type="button" class="btn btn-success mb-3">Update Post</button>
+                <button id="add-posts-button" type="button" class="btn btn-primary mb-3">Add Post</button>
+                <button id="update-posts-button" type="button" class="btn btn-secondary mb-3 update-btn">Save Post</button>
                </form>
            </div>
         </main>
@@ -49,33 +49,27 @@ export function PostsEvent() {
 
 function createAddPostListener() {
     console.log("adding add post listener")
-    $("#add-posts-button").click(function (){
+    $("#add-posts-button").click(function () {
         const newPost = {
             title: $("#add-post-title").val(),
             content: $("#add-post-content").val()
         }
 
         const postId = $("#add-post-id").val();
-       const request = {};
-       let uriExtra = "";
-       if (postId > 0){
-           newPost.id = postId
-           request.method = "PUT"
-           uriExtra = `/${postId}`;
-           console.log("Ready to update post:");
-       }
-       request.headers = {
-           'Content-Type': 'application/json'
-       };
-       request.body = JSON.stringify(newPost);
-       fetch(`${POST_URI}${uriExtra}`, request)
-           .then(res => {
-               console.log(`${request.method} SUCCESS: ${res.status}`);
-           }).catch(error => {
-           console.log(`${request.method} ERROR: ${error}`);
-       }).finally(() => {
-           createView("/posts")
-       })
+        const request = {
+            method: "Post",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(newPost)
+        }
+        fetch(POST_URI, request)
+            .then(res => {
+                console.log(res.status);
+                createView("/posts")
+            }).catch(error => {
+            console.log(error);
+        }).finally(() => {
+            createView("/posts");
+        });
     });
 }
 
@@ -87,6 +81,36 @@ function editListener(){
         $("#add-post-id").val(postId);
         $("#add-post-title").val(postTitle);
         $("#add-post-content").val(postContent);
+    });
+
+    $("#update-post-button").click(function (){
+        const newTitle = $("#add-post-title").val();
+        const newContent = $("#add-post-content").val();
+        const postId = $(this).data("id");
+
+        const updatedPost = {
+            id: postId,
+            title: newTitle,
+            content: newContent
+        }
+
+        console.log("Ready to update:")
+        console.log(updatedPost)
+
+        const request = {
+            method: "PUT",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(updatedPost)
+        }
+        fetch(`${POST_URI}/${postId}`, request)
+            .then(res => {
+                console.log(res.status);
+                createView("/posts")
+            }).catch(error => {
+            console.log(error);
+        }).finally(() => {
+            createView("/posts");
+        });
     });
 }
 
