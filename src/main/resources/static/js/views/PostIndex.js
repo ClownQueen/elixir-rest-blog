@@ -14,14 +14,18 @@ export default function PostIndex(props) {
                 ${props.posts.map(post => {
                 return `<h3 id="title-${post.id}">${post.title}</h3>
                  <p id="content-${post.id}">${post.content}</p>
-                  <button type="button" class="btn btn-success mb-3 edit-button" data-id="${post.id}">Edit</button>
-                 <button type="button" class="btn btn-danger mb-3 delete-button" data-id="${post.id}">Delete</button>`
+                  <button id="edit-button-${post.id}" type="button" class="btn btn-success mb-3 edit-button" data-id="${post.id}">Edit</button>
+                 <button id="delete-button-${post.id}" type="button" class="btn btn-danger mb-3 delete-button" data-id="${post.id}">Delete</button>`
                 
     }).join('')} 
             </div>
             
             <div class="container" id="add-posts">
                <form id="add-posts-form">
+                <div class="mb-3">
+                    <label for="data-id" class="from=lable">Post:</label>
+                    <input id="post-id" type="text" class="from-control" id="data-id" disabled placeholder="0">
+                </div>
                 <div class="mb-3">
                     <label for="add-posts-title" class="form-label">Title</label>
                     <input type="text" class="form-control" id="add-posts-title" placeholder="Enter Title">
@@ -30,8 +34,8 @@ export default function PostIndex(props) {
                     <label for="add-posts-content" class="form-label">Content</label>
                     <input type="text" class="form-control" id="add-posts-content" placeholder="Enter Content">
                 </div>
-                <button id="add-posts-button" type="button" class="btn btn-primary mb-3">Add Post</button>
-                <button id="update-posts-button" type="button" class="btn btn-secondary mb-3 update-btn">Save Post</button>
+                <button id="add-posts-button" class="btn btn-primary mb-3">Add Post</button>
+                <button id="update-posts-button" class="btn btn-secondary mb-3">Save Post</button>
                </form>
            </div>
         </main>
@@ -55,7 +59,6 @@ function createAddPostListener() {
             content: $("#add-post-content").val()
         }
 
-        const postId = $("#add-post-id").val();
         const request = {
             method: "Post",
             headers: {'Content-Type': 'application/json'},
@@ -76,11 +79,16 @@ function createAddPostListener() {
 function editListener(){
     $(".edit-button").click(function (){
         const postId = $(this).data("id");
-        const postTitle = $(`title-${postId}`).val();
-        const postContent = $(`content-${postId}`).val();
+
+        let titleId = "title-" + postId;
+        const updatedTitle = $(titleId).text();
+
+        let contentId = "content-" + postId;
+        const updatedContent = $(contentId).text();
+
         $("#add-post-id").val(postId);
-        $("#add-post-title").val(postTitle);
-        $("#add-post-content").val(postContent);
+        $("#add-post-title").val(updatedTitle);
+        $("#add-post-content").val(updatedContent);
     });
 
     $("#update-post-button").click(function (){
@@ -105,7 +113,6 @@ function editListener(){
         fetch(`${POST_URI}/${postId}`, request)
             .then(res => {
                 console.log(res.status);
-                createView("/posts")
             }).catch(error => {
             console.log(error);
         }).finally(() => {
@@ -125,7 +132,7 @@ function deleteListener(){
                 'Content-Type': 'application/json'
             }
         };
-        fetch(`${POST_URI}/${postId}`)
+        fetch(`${POST_URI}/${postId}`, request)
             .then(res => {
                 console.log("DELETE SUCCESS: " + res.status);
             }).catch(error => {
