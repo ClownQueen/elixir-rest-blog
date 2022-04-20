@@ -55,8 +55,8 @@ function createAddPostListener() {
     console.log("adding add post listener")
     $("#add-posts-button").click(function () {
         const newPost = {
-            title: $("#add-post-title").val(),
-            content: $("#add-post-content").val()
+            title: $("#add-posts-title").val(),
+            content: $("#add-posts-content").val()
         }
 
         const request = {
