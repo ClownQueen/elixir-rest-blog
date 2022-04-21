@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.ContentHandler;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,10 +45,17 @@ public class PostController {
     private void createPost(@RequestBody Post newPost){
         newPost.setAuthor(userRepository.getById(1L));
         List<Category> categories = new ArrayList<>();
-        categories.add(categoryRepository.findCategoriesByName("music"));
-        categories.add(categoryRepository.findCategoriesByName("food"));
-        categories.add(categoryRepository.findCategoriesByName("holiday"));
-        categories.add(categoryRepository.findCategoriesByName("gaming"));
+        for (Category category: newPost.getCategories()) {
+            if (categoryRepository.findCategoriesByName(category.getName()) != null) {
+                categories.add(categoryRepository.findCategoriesByName(category.getName()));
+            } else {
+                Category newCat = new Category();
+                newCat.setName(category.getName());
+                categoryRepository.save(newCat);
+                categories.add(categoryRepository.findCategoriesByName(newCat.getName()));
+            }
+        }
+        newPost.setCategories(categories);
         postsRepository.save(newPost);
         System.out.println("Ready to add post: " + newPost);
     }
@@ -71,6 +79,11 @@ public class PostController {
     @GetMapping("searchByCategory")
     private List<Post> searchByCategory(@RequestParam String category){
         return postsRepository.findAllByCategories(categoryRepository.findCategoriesByName(category));
+    }
+
+    @GetMapping("searchByTitle")
+    private List<Post> searchPostByTitleKeyword(@RequestParam String keyword){
+        return postsRepository.searchByTitleLike(keyword);
     }
 
 }
