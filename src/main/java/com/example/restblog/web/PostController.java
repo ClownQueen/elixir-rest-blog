@@ -1,24 +1,28 @@
 package com.example.restblog.web;
 
-import com.example.restblog.data.Post;
-import com.example.restblog.data.PostsRepository;
-import com.example.restblog.data.User;
+import com.example.restblog.data.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.ContentHandler;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
 @RequestMapping(value ="/api/posts", headers = "Accept=application/json")
 public class PostController {
 
-    private PostsRepository postsRepository;
+    private final PostsRepository postsRepository;
+    private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
 
-    public PostController(PostsRepository postsRepository) {
+    public PostController(PostsRepository postsRepository, UserRepository userRepository, CategoryRepository categoryRepository) {
         this.postsRepository = postsRepository;
+        this.userRepository = userRepository;
+        this.categoryRepository = categoryRepository;
     }
+
 
 //    private final User USER1 = new User(1L, "User 1", "User1@gmail.com", "11111", null, User.Role.USER);
 //    private final User USER2 = new User(2L, "User 2", "User2@gmail.com", "22222", null, User.Role.USER);
@@ -28,22 +32,23 @@ public class PostController {
     @GetMapping
     private List<Post> getAll(){
         ArrayList<Post> posts = new ArrayList<>();
-//        posts.add(new Post(1L, "Dream Post", "My dad awoke to himself saying 500 million dollars.", USER1));
-//        posts.add(new Post(2L, "Dinner Post", "I had 10 piece chicken nuggets, large fries, and large chocolate shake from McDonald's.", USER2));
-//        posts.add(new Post(3L, "Painting Post", "My dad painted for my little sibling's birthday that's on thursday.", USER3));
-        return posts;
+        return postsRepository.findAll();
     }
 
-//    @GetMapping("{postId}")
-//    public Post getById(@PathVariable Long postId){
-//        Post post = new Post(postId, "Post " + postId, "Blah blah blah", USER4);
-//        return post;
-//    }
+    @GetMapping("{postId}")
+    private Optional<Post> getById(@PathVariable Long postId){
+        return postsRepository.findById(postId);
+    }
 
     @PostMapping
     private void createPost(@RequestBody Post newPost){
-        Post postToAdd = new Post(newPost.getTitle(), newPost.getContent());
-        postsRepository.save(postToAdd);
+        newPost.setAuthor(userRepository.getById(1L));
+        List<Category> categories = new ArrayList<>();
+        categories.add(categoryRepository.findCategoriesByName("music"));
+        categories.add(categoryRepository.findCategoriesByName("food"));
+        categories.add(categoryRepository.findCategoriesByName("holiday"));
+        categories.add(categoryRepository.findCategoriesByName("gaming"));
+        postsRepository.save(newPost);
         System.out.println("Ready to add post: " + newPost);
     }
 
@@ -62,4 +67,10 @@ public class PostController {
         postsRepository.delete(postToDelete);
         System.out.println("Post has been deleted: " + postId);
     }
+
+    @GetMapping("searchByCategory")
+    private List<Post> searchByCategory(@RequestParam String category){
+        return postsRepository.findAllByCategories(categoryRepository.findCategoriesByName(category));
+    }
+
 }

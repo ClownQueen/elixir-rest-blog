@@ -1,14 +1,14 @@
 package com.example.restblog.web;
 
-import com.example.restblog.data.Post;
 import com.example.restblog.data.User;
 import com.example.restblog.data.UserRepository;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -32,17 +32,12 @@ public class UsersController {
 
     @GetMapping
     private List<User> getAll(){
-//        ArrayList<User> user = new ArrayList<>();
-//        user.add(new User(1L, "User 1", "email 1m", "password 1", null, User.Role.ADMIN, Arrays.asList(POST1,POST2)));
-//        user.add(new User(2L, "User 2", "email 2", "password2", null, User.Role.ADMIN, Arrays.asList(POST3,POST4)));
-//        user.add(new User(3L, "User 3", "email 3", "password 3", null, User.Role.ADMIN, Arrays.asList(POST5,POST6)));
         return userRepository.findAll();
     }
 
     @GetMapping("{userId}")
-    public User getById(@PathVariable Long userId){
-//        User user = new User(userId, "Bob Smith", "bobsemail", "password1234", null, User.Role.ADMIN, Arrays.asList(POST7, POST8));
-        return userRepository.getById(userId);
+    public Optional<User> getById(@PathVariable Long userId){
+        return userRepository.findById(userId);
     }
 
 //    @GetMapping("/email")
@@ -59,7 +54,9 @@ public class UsersController {
 
     @PostMapping
     private void create(@RequestBody User newUser){
-        User user = new User(newUser.getUsername(), newUser.getEmail(), newUser.getPassword(), newUser.getCreatedAt(), newUser.getRole());
+        User user = newUser;
+        user.setCreatedAt(LocalDate.now());
+        user.setRole(User.Role.USER);
         userRepository.save(user);
         System.out.println("Ready to add user: " + newUser);
     }
