@@ -50,16 +50,16 @@ public class PostController {
     @PutMapping("{postId}")
     private void updatePost(@PathVariable Long postId, @RequestBody Post updatedPost){
         Post postToUpdate = postsRepository.getById(postId);
-        postToUpdate.getContent(newPost.getContent());
-        postToUpdate.getTitle(newPost.getTitle());
-        postsRepository(postToUpdate);
+        postToUpdate.setContent(updatedPost.getContent());
+        postToUpdate.setTitle(updatedPost.getTitle());
+        postsRepository.save(postToUpdate);
         System.out.println("Updatig post : " + postId + " with " + updatedPost);
     }
 
     @DeleteMapping("{postId}")
     private void deletePost(@PathVariable Long postId){
         Post postToDelete = postsRepository.getById(postId);
-        postsRepository(postToDelete);
+        postsRepository.delete(postToDelete);
         System.out.println("Post has been deleted: " + postId);
     }
 }

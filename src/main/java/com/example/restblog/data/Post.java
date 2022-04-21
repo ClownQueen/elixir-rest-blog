@@ -27,4 +27,5 @@ public class Post {
         this.content = content;
     }
 //    private User author;
+//    private Collection<Category> categories;
 }

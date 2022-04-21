@@ -30,4 +30,12 @@ public class User {
     @Column(nullable = false)
     private Role role;
 //    private Collection<Post> posts;
+
+    public User(String username, String email, String password, LocalDate createdAt, Role role) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.createdAt = createdAt;
+        this.role = role;
+    }
 }
