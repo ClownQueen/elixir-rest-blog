@@ -4,9 +4,7 @@ import com.example.restblog.data.*;
 import com.example.restblog.services.EmailService;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.ContentHandler;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,10 +18,11 @@ public class PostController {
     private final CategoryRepository categoryRepository;
     private final EmailService emailService;
 
-    public PostController(PostsRepository postsRepository, UserRepository userRepository, CategoryRepository categoryRepository) {
+    public PostController(PostsRepository postsRepository, UserRepository userRepository, CategoryRepository categoryRepository, EmailService emailService) {
         this.postsRepository = postsRepository;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
+        this.emailService = emailService;
     }
 
 
@@ -60,7 +59,7 @@ public class PostController {
         newPost.setCategories(categories);
         postsRepository.save(newPost);
         System.out.println("Ready to add post: " + newPost);
-        emailService.prepareAndSend(newPost, "Check this out!", "");
+        emailService.prepareAndSend(newPost, "Check this out!", "This is one Crazy Post!");
     }
 
     @PutMapping("{postId}")

@@ -23,8 +23,7 @@ export default function PostIndex(props) {
             <div class="container" id="add-posts">
                <form id="add-posts-form">
                 <div class="mb-3">
-                    <label for="data-id" class="from=lable">Post:</label>
-                    <input id="post-id" type="text" class="from-control" id="data-id" disabled placeholder="0">
+                    <input type="text" class="from-control" id="add-posts-id" disabled placeholder="0">
                 </div>
                 <div class="mb-3">
                     <label for="add-posts-title" class="form-label">Title</label>
@@ -81,19 +80,21 @@ function editListener(){
         const postId = $(this).data("id");
 
         let titleId = "title-" + postId;
-        const updatedTitle = $(titleId).text();
+        const updatedTitle = $(`#${titleId}`).text();
+        console.log(updatedTitle);
 
         let contentId = "content-" + postId;
-        const updatedContent = $(contentId).text();
+        const updatedContent = $(`#${contentId}`).text();
 
-        $("#add-post-id").val(postId);
-        $("#add-post-title").val(updatedTitle);
-        $("#add-post-content").val(updatedContent);
+        $("#add-posts-id").val(postId);
+        $("#add-posts-title").val(updatedTitle);
+        $("#add-posts-content").val(updatedContent);
+        $("#update-posts-button").data("id", postId)
     });
 
-    $("#update-post-button").click(function (){
-        const newTitle = $("#add-post-title").val();
-        const newContent = $("#add-post-content").val();
+    $("#update-posts-button").click(function (){
+        const newTitle = $("#add-posts-title").val();
+        const newContent = $("#add-posts-content").val();
         const postId = $(this).data("id");
 
         const updatedPost = {
@@ -113,6 +114,7 @@ function editListener(){
         fetch(`${POST_URI}/${postId}`, request)
             .then(res => {
                 console.log(res.status);
+                createView("/posts")
             }).catch(error => {
             console.log(error);
         }).finally(() => {
