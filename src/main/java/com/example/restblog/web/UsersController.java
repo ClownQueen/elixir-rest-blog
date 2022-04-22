@@ -2,6 +2,7 @@ package com.example.restblog.web;
 
 import com.example.restblog.data.User;
 import com.example.restblog.data.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -16,19 +17,11 @@ import java.util.Optional;
 public class UsersController {
 
     private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
     public UsersController (UserRepository userRepository){
         this.userRepository = userRepository;
     }
-//    private static final Post POST1 = new Post(1L, "Post 1", "Blah", null);
-//    private static final Post POST2 = new Post(2L, "Post 2", "Blah blah", null);
-//    private static final Post POST3 = new Post(3L, "Post 3", "Blah blah blah", null);
-//    private static final Post POST4 = new Post(4L, "Post 4", "Blah blah blah blah", null);
-//    private static final Post POST5 = new Post(5L, "Post 5", "Blah blah blah blah blah", null);
-//    private static final Post POST6 = new Post(6L, "Post 6", "Blah blah blah blah blah blah", null);
-//    private static final Post POST7 = new Post(7L, "Post 7", "Blah blah blah blah blah blah", null);
-//    private static final Post POST8 = new Post(8L, "Post 8", "Blah blah blah blah blah blah", null);
-//    private static final Post POST9 = new Post(9L, "Post 9", "Blah blah blah blah blah blah", null);
 
     @GetMapping
     private List<User> getAll(){
@@ -55,8 +48,11 @@ public class UsersController {
         User user = newUser;
         user.setCreatedAt(LocalDate.now());
         user.setRole(User.Role.USER);
-        userRepository.save(user);
         System.out.println("Ready to add user: " + newUser);
+        String encryptedPassword = newUser.getPassword();
+        encryptedPassword = passwordEncoder.encode(encryptedPassword);
+        newUser.setPassword(encryptedPassword);
+        userRepository.save(user);
     }
 
     @PutMapping("{userId}")

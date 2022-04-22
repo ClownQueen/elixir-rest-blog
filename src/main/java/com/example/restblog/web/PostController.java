@@ -5,6 +5,7 @@ import com.example.restblog.services.EmailService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,18 +46,7 @@ public class PostController {
     @PostMapping
     private void createPost(@RequestBody Post newPost){
         newPost.setAuthor(userRepository.getById(1L));
-        List<Category> categories = new ArrayList<>();
-        for (Category category: newPost.getCategories()) {
-            if (categoryRepository.findCategoriesByName(category.getName()) != null) {
-                categories.add(categoryRepository.findCategoriesByName(category.getName()));
-            } else {
-                Category newCat = new Category();
-                newCat.setName(category.getName());
-                categoryRepository.save(newCat);
-                categories.add(categoryRepository.findCategoriesByName(newCat.getName()));
-            }
-        }
-        newPost.setCategories(categories);
+        newPost.setCategories(Arrays.asList(categoryRepository.getById(1L),categoryRepository.getById(2L), categoryRepository.getById(3L)));
         postsRepository.save(newPost);
         System.out.println("Ready to add post: " + newPost);
         emailService.prepareAndSend(newPost, "Check this out!", "This is one Crazy Post!");
