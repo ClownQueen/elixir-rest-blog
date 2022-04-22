@@ -40,17 +40,15 @@ public class UsersController {
         return userRepository.findById(userId);
     }
 
-//    @GetMapping("/email")
-//    public User getByEmail(@RequestParam String email){
-//        User user = new User(1l,"User420",email,"pasword1234",null, User.Role.ADMIN);
-//        return user;
-//    }
+    @GetMapping("/email")
+    public User getByEmail(@RequestParam String email){
+        return userRepository.findByEmail(email);
+    }
 
-//    @GetMapping("/username")
-//    public User getByUsername(@RequestParam String username){
-//        User user = new User(1L, username,"email450","password450",null, User.Role.ADMIN);
-//        return user;
-//    }
+    @GetMapping("/username")
+    public User getByUsername(@RequestParam String username){
+        return userRepository.findByUsername(username);
+    }
 
     @PostMapping
     private void create(@RequestBody User newUser){

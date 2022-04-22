@@ -1,6 +1,7 @@
 package com.example.restblog.web;
 
 import com.example.restblog.data.*;
+import com.example.restblog.services.EmailService;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.ContentHandler;
@@ -17,6 +18,7 @@ public class PostController {
     private final PostsRepository postsRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final EmailService emailService;
 
     public PostController(PostsRepository postsRepository, UserRepository userRepository, CategoryRepository categoryRepository) {
         this.postsRepository = postsRepository;
@@ -58,6 +60,7 @@ public class PostController {
         newPost.setCategories(categories);
         postsRepository.save(newPost);
         System.out.println("Ready to add post: " + newPost);
+        emailService.prepareAndSend(newPost, "Check this out!", "");
     }
 
     @PutMapping("{postId}")

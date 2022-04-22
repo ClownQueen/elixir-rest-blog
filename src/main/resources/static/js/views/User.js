@@ -23,7 +23,7 @@ export default function User(props) {
                     <form>
                         <div class="form-group">
                             <label for="new-user-password">Change Password</label>
-                            <inout type="text" class="form-control" id="new-user-password" placeholder="Enter New Password.">
+                            <input type="text" class="form-control" id="new-user-password" placeholder="Enter New Password.">
                         </div>
                         <button type="submit" class="btn btn-primary" id="edit-password-btn">Submit</button>
                     </form>
