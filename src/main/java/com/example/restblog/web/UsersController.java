@@ -13,14 +13,15 @@ import java.util.Optional;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value ="/api/users", headers = "Accept=application/json")
+@RequestMapping(value ="/api/user", headers = "Accept=application/json")
 public class UsersController {
 
     private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private PasswordEncoder encoder;
 
-    public UsersController (UserRepository userRepository){
+    public UsersController(UserRepository userRepository, PasswordEncoder encoder){
         this.userRepository = userRepository;
+        this.encoder = encoder;
     }
 
     @GetMapping
@@ -50,7 +51,7 @@ public class UsersController {
         user.setRole(User.Role.USER);
         System.out.println("Ready to add user: " + newUser);
         String encryptedPassword = newUser.getPassword();
-        encryptedPassword = passwordEncoder.encode(encryptedPassword);
+        encryptedPassword = encoder.encode(encryptedPassword);
         newUser.setPassword(encryptedPassword);
         userRepository.save(user);
     }

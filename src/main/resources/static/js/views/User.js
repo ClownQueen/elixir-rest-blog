@@ -1,9 +1,5 @@
 import createView from "../createView.js";
 
-export function UserEvents() {
-    UserEvents();
-}
-
 const BASE_URI = "http://localhost:8081/api/posts";
 
 export default function User(props) {
@@ -31,10 +27,9 @@ export default function User(props) {
             </div>   
         </main>
     `;
+}
 
-
-
-function UserEvent(){
+    export function UserEvents(){
      $("#edit-password-btn").click(function (){
          // 1. grab data from form fields
          const userId = 1; // $("#add-post-id").val();
@@ -59,4 +54,3 @@ function UserEvent(){
 
      });
     }
-}
