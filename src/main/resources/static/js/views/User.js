@@ -1,6 +1,6 @@
 import createView from "../createView.js";
 
-const BASE_URI = "http://localhost:8081/api/posts";
+const BASE_URI = "http://localhost:8081/api/users";
 
 export default function User(props) {
     console.log("The frontend did it. HER FAULT");
@@ -12,9 +12,8 @@ export default function User(props) {
             <div class="fluid-container">
                 <div class="user-data-container">
                     <p class="username" data-id="${props.user.id}">Username: ${props.user.username}</p>
-                    <p class= "email" data-id="${props.user.id} ">Email: ${props.user.email}</p>
-                    <p class="password" data-id="${props.user.id}">Password: ${props.user.password}</p>
-                </div>
+                    <p class= "email" data-id="${props.user.id} ">Email: ${props.user.email}</p>               
+                    </div>
                 <div class="edit-user-container">
                     <form>
                         <div class="form-group">
@@ -39,7 +38,7 @@ export default function User(props) {
 
          // 2. assemble the request
          const request = {
-             method: "PUT"
+             method: "PUT",
          }
 
          // 3. do the fetch with the correct URI please (check against Postman)

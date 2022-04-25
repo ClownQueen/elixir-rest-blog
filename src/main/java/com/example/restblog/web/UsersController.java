@@ -3,6 +3,7 @@ package com.example.restblog.web;
 import com.example.restblog.data.User;
 import com.example.restblog.data.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -13,7 +14,7 @@ import java.util.Optional;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value ="/api/user", headers = "Accept=application/json")
+@RequestMapping(value ="/api/users", headers = "Accept=application/json")
 public class UsersController {
 
     private UserRepository userRepository;
@@ -39,9 +40,11 @@ public class UsersController {
         return userRepository.findByEmail(email);
     }
 
-    @GetMapping("/username")
-    public User getByUsername(@RequestParam String username){
-        return userRepository.findByUsername(username);
+    @GetMapping("me")
+    public User getMyInfo(OAuth2Authentication auth){
+        // TODO: return the currently logged in user info
+        String email = auth.getName();
+        return userRepository.findByEmail(email);
     }
 
     @PostMapping

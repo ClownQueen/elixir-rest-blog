@@ -1,4 +1,5 @@
 import createView from "../createView.js";
+import {getHeaders} from "../auth.js";
 // import addLoginEvent from "../auth";
 
 const POST_URI = "http://localhost:8081/api/posts";
@@ -60,7 +61,7 @@ function createAddPostListener() {
 
         const request = {
             method: "Post",
-            headers: {'Content-Type': 'application/json'},
+            headers: getHeaders(),
             body: JSON.stringify(newPost)
         }
         fetch(POST_URI, request)
@@ -108,7 +109,7 @@ function editListener(){
 
         const request = {
             method: "PUT",
-            headers: {'Content-Type': 'application/json'},
+            headers: getHeaders(),
             body: JSON.stringify(updatedPost)
         }
         fetch(`${POST_URI}/${postId}`, request)
@@ -130,9 +131,7 @@ function deleteListener(){
 
         const request = {
             method: "DELETE",
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            headers: getHeaders()
         };
         fetch(`${POST_URI}/${postId}`, request)
             .then(res => {
