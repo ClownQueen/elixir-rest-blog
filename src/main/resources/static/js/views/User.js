@@ -9,7 +9,6 @@ export default function User(props) {
             <h1>User Page</h1>
         </header>
         <main>
-            <div class="fluid-container">
                 <div class="user-data-container">
                     <p class="username" data-id="${props.user.id}">Username: ${props.user.username}</p>
                     <p class= "email" data-id="${props.user.id} ">Email: ${props.user.email}</p>               
@@ -17,13 +16,12 @@ export default function User(props) {
                 <div class="edit-user-container">
                     <form>
                         <div class="form-group">
-                            <label for="new-user-password">Change Password</label>
-                            <input type="text" class="form-control" id="new-user-password" placeholder="Enter New Password.">
+                            <label for="new-user-password">New Password</label>
+                            <input type="password" class="form-control" id="new-user-password" placeholder="Enter New Password.">
                         </div>
                         <button type="submit" class="btn btn-primary" id="edit-password-btn">Submit</button>
                     </form>
-                </div>
-            </div>   
+                </div>  
         </main>
     `;
 }

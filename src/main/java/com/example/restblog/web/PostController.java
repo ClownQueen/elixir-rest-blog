@@ -46,11 +46,12 @@ public class PostController {
 
     @PostMapping
     private void createPost(@RequestBody Post newPost, OAuth2Authentication auth){
-        newPost.setAuthor(userRepository.getById(1L));
-        newPost.setCategories(Arrays.asList(categoryRepository.getById(1L),categoryRepository.getById(2L), categoryRepository.getById(3L)));
+//        newPost.setAuthor(userRepository.getById(1L));
         String email = auth.getName();
         User user = userRepository.findByEmail(email);
         newPost.setAuthor(user);
+
+        newPost.setCategories(Arrays.asList(categoryRepository.getById(1L),categoryRepository.getById(2L), categoryRepository.getById(3L)));
         postsRepository.save(newPost);
         System.out.println("Ready to add post: " + newPost);
         emailService.prepareAndSend(newPost, "Check this out!", "This is one Crazy Post!");
