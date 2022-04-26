@@ -1,4 +1,5 @@
 import createView from "../createView.js";
+import {getHeaders} from "../auth";
 
 const BASE_URI = "http://localhost:8081/api/users";
 
@@ -9,6 +10,7 @@ export default function User(props) {
             <h1>User Page</h1>
         </header>
         <main>
+            <div class="container-fluid">
                 <div class="user-data-container">
                     <p class="username" data-id="${props.user.id}">Username: ${props.user.username}</p>
                     <p class= "email" data-id="${props.user.id} ">Email: ${props.user.email}</p>               
@@ -21,7 +23,13 @@ export default function User(props) {
                         </div>
                         <button type="submit" class="btn btn-primary" id="edit-password-btn">Submit</button>
                     </form>
-                </div>  
+                    <div>
+                        ${props.user.posts.map(post =>
+                            `<h3 id="title-${post.id}">${post.title}</h3>
+                             <p id="content-${post.id}">${post.content}</p>`).join('')}
+                    </div>
+                </div> 
+            </div>     
         </main>
     `;
 }
@@ -36,7 +44,8 @@ export default function User(props) {
 
          // 2. assemble the request
          const request = {
-             method: "PUT",
+             headers: getHeaders(),
+             method: "PUT"
          }
 
          // 3. do the fetch with the correct URI please (check against Postman)
