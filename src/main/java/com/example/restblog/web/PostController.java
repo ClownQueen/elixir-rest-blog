@@ -27,12 +27,6 @@ public class PostController {
         this.emailService = emailService;
     }
 
-
-//    private final User USER1 = new User(1L, "User 1", "User1@gmail.com", "11111", null, User.Role.USER);
-//    private final User USER2 = new User(2L, "User 2", "User2@gmail.com", "22222", null, User.Role.USER);
-//    private final User USER3 = new User(3L, "User 3", "User3@gmail.com", "33333", null, User.Role.ADMIN);
-//    private final User USER4 = new User(4L, "User 4", "User4@gmail.com", "44444", null, User.Role.ADMIN);
-
     @GetMapping
     private List<Post> getAll(){
         ArrayList<Post> posts = new ArrayList<>();

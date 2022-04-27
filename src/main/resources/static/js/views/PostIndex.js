@@ -34,6 +34,15 @@ export default function PostIndex(props) {
                     <label for="add-posts-content" class="form-label">Content</label>
                     <input type="text" class="form-control" id="add-posts-content" placeholder="Enter Content">
                 </div>
+                
+                <!-- display array of categories as checkboxes-->
+                ${props.category.map(category => {
+        return`
+                <div className="form-check form-check-inline">
+                    <input className="form-check-input" type="checkbox" id="category-${category.id}" value="category">
+                    <label className="form-check-label" id="category-${category.id}">${category.name}</label>
+                </div>`
+    }).join('')}
                 <button id="add-posts-button" class="btn btn-primary mb-3">Add Post</button>
                 <button id="update-posts-button" class="btn btn-secondary mb-3">Save Post</button>
                </form>

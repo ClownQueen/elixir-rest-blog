@@ -1,5 +1,5 @@
 import createView from "../createView.js";
-import {getHeaders} from "../auth";
+import {getHeaders} from "../auth.js";
 
 const BASE_URI = "http://localhost:8081/api/users";
 
@@ -23,11 +23,11 @@ export default function User(props) {
                         </div>
                         <button type="submit" class="btn btn-primary" id="edit-password-btn">Submit</button>
                     </form>
-                    <div>
-                        ${props.user.posts.map(post =>
-                            `<h3 id="title-${post.id}">${post.title}</h3>
-                             <p id="content-${post.id}">${post.content}</p>`).join('')}
-                    </div>
+                </div>
+                <div class="post-container">
+                    ${props.user.posts.map(post => 
+                    `<h3 id="title-${post.id}">${post.title}</h3>
+                     <p id="content-${post.id}">${post.content}</p>`).join('')}
                 </div> 
             </div>     
         </main>

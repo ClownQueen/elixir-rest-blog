@@ -47,12 +47,12 @@ export default function router(URI) {
             title: 'Register',
             viewEvent: RegisterEvent
         },
-        '/user': {
+        '/users': {
             returnView: User,
             state: {
                 user: "/api/users/me"
             },
-            uri: '/user',
+            uri: '/users',
             title: 'User Info',
             viewEvent: UserEvents
         },
