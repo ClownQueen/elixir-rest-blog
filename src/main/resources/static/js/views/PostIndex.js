@@ -5,6 +5,7 @@ import {getHeaders} from "../auth.js";
 const POST_URI = "http://localhost:8081/api/posts";
 
 export default function PostIndex(props) {
+    console.log(props)
     return `
     <div class="container-fluid">
         <header>
@@ -15,6 +16,10 @@ export default function PostIndex(props) {
                 ${props.posts.map(post => {
                 return `<h3 id="title-${post.id}">${post.title}</h3>
                  <p id="content-${post.id}">${post.content}</p>
+                 ${post.categories.map(category => {
+                    return`
+                    <p id="categories-${category.id}">${category.name}</p>`
+                }).join('')}
                   <button id="edit-button-${post.id}" type="button" class="btn btn-success mb-3 edit-button" data-id="${post.id}">Edit</button>
                  <button id="delete-button-${post.id}" type="button" class="btn btn-danger mb-3 delete-button" data-id="${post.id}">Delete</button>`
                 
@@ -36,11 +41,11 @@ export default function PostIndex(props) {
                 </div>
                 
                 <!-- display array of categories as checkboxes-->
-                ${props.category.map(category => {
+                ${props.categories.map(category => {
         return`
-                <div className="form-check form-check-inline">
-                    <input className="form-check-input" type="checkbox" id="category-${category.id}" value="category">
-                    <label className="form-check-label" id="category-${category.id}">${category.name}</label>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="category-${category.id}" value="${category.id}">
+                    <label class="form-check-label" for="category-${category.id}">${category.name}</label>
                 </div>`
     }).join('')}
                 <button id="add-posts-button" class="btn btn-primary mb-3">Add Post</button>
@@ -65,7 +70,8 @@ function createAddPostListener() {
     $("#add-posts-button").click(function () {
         const newPost = {
             title: $("#add-posts-title").val(),
-            content: $("#add-posts-content").val()
+            content: $("#add-posts-content").val(),
+            // categories:
         }
 
         const request = {

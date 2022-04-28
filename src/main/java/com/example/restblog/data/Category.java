@@ -2,6 +2,7 @@ package com.example.restblog.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
+import lombok.ToString.Exclude;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -32,6 +33,6 @@ public class Category {
             inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT)
     )
     @JsonIgnoreProperties("categories")
-    @ToString.Exclude
+    @Exclude
     private Collection<Post> posts;
 }
