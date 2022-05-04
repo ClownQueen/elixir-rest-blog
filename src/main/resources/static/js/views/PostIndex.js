@@ -65,6 +65,7 @@ export function PostsEvent() {
     deleteListener();
 }
 
+// add in the listeners  the categories selected
 function createAddPostListener() {
     console.log("adding add post listener")
     $("#add-posts-button").click(function () {
